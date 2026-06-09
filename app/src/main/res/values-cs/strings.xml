@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Kalkulačka</string>
+    <string name="calculator">Kalkulačka</string>
+    <string name="converter">Převodník</string>
+    <string name="settings">Nastavení</string>
+    <string name="language">Jazyk</string>
+    <string name="history">Historie</string>
+    <string name="history_empty">Žádná historie</string>
+    <string name="close">Zavřít</string>
+    <string name="clear">Vymazat</string>
+    <string name="back">Zpět</string>
+    <string name="remove">Odebrat</string>
+    <string name="add_currency">Přidat měnu</string>
+    <string name="search_currency">Hledat měnu…</string>
+    <string name="offline_rates_notice">Směnné kurzy jsou uloženy offline. Připojte se k internetu pro aktualizaci.</string>
+    <string name="select_unit">Vybrat jednotku</string>
+    <string name="conv_currency">Měna</string>
+    <string name="conv_length">Délka</string>
+    <string name="conv_weight">Hmotnost</string>
+    <string name="conv_area">Plocha</string>
+    <string name="conv_time">Čas</string>
+    <string name="conv_temperature">Teplota</string>
+    <string name="conv_speed">Rychlost</string>
+    <string name="conv_volume">Objem</string>
+    <string name="conv_data">Data</string>
+    <string name="conv_numeral">Číselná soustava</string>
+    <string name="conv_finance">Finance</string>
+    <string name="conv_bmi">BMI</string>
+</resources>

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Calcolatrice</string>
+    <string name="calculator">Calcolatrice</string>
+    <string name="converter">Convertitore</string>
+    <string name="settings">Impostazioni</string>
+    <string name="language">Lingua</string>
+    <string name="history">Cronologia</string>
+    <string name="history_empty">Nessuna cronologia</string>
+    <string name="close">Chiudi</string>
+    <string name="clear">Cancella</string>
+    <string name="back">Indietro</string>
+    <string name="remove">Rimuovi</string>
+    <string name="add_currency">Aggiungi valuta</string>
+    <string name="search_currency">Cerca valuta…</string>
+    <string name="offline_rates_notice">I tassi di cambio sono memorizzati offline. Connettiti a Internet per aggiornare.</string>
+    <string name="select_unit">Seleziona unità</string>
+    <string name="conv_currency">Valuta</string>
+    <string name="conv_length">Lunghezza</string>
+    <string name="conv_weight">Peso</string>
+    <string name="conv_area">Area</string>
+    <string name="conv_time">Tempo</string>
+    <string name="conv_temperature">Temperatura</string>
+    <string name="conv_speed">Velocità</string>
+    <string name="conv_volume">Volume</string>
+    <string name="conv_data">Dati</string>
+    <string name="conv_numeral">Sistema numerico</string>
+    <string name="conv_finance">Finanza</string>
+    <string name="conv_bmi">IMC</string>
+</resources>

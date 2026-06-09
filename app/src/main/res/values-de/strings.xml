@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Rechner</string>
+    <string name="calculator">Rechner</string>
+    <string name="converter">Konverter</string>
+    <string name="settings">Einstellungen</string>
+    <string name="language">Sprache</string>
+    <string name="history">Verlauf</string>
+    <string name="history_empty">Kein Verlauf vorhanden</string>
+    <string name="close">Schließen</string>
+    <string name="clear">Löschen</string>
+    <string name="back">Zurück</string>
+    <string name="remove">Entfernen</string>
+    <string name="add_currency">Währung hinzufügen</string>
+    <string name="search_currency">Währung suchen…</string>
+    <string name="offline_rates_notice">Wechselkurse sind offline gespeichert. Verbinden Sie sich mit dem Internet zum Aktualisieren.</string>
+    <string name="select_unit">Einheit auswählen</string>
+    <string name="conv_currency">Währung</string>
+    <string name="conv_length">Länge</string>
+    <string name="conv_weight">Gewicht</string>
+    <string name="conv_area">Fläche</string>
+    <string name="conv_time">Zeit</string>
+    <string name="conv_temperature">Temperatur</string>
+    <string name="conv_speed">Geschwindigkeit</string>
+    <string name="conv_volume">Volumen</string>
+    <string name="conv_data">Daten</string>
+    <string name="conv_numeral">Zahlensystem</string>
+    <string name="conv_finance">Finanzen</string>
+    <string name="conv_bmi">BMI</string>
+</resources>

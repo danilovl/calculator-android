@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Plus sign (+) — top left, center ~(37,39), stroke 3 -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M29,37 L36,37 L36,31 L39,31 L39,37 L45,37 L45,40 L39,40 L39,47 L36,47 L36,40 L29,40 Z" />
+
+    <!-- Minus sign (−) — top right, center ~(67,39), stroke 3 -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M59,37 L75,37 L75,40 L59,40 Z" />
+
+    <!-- Multiply sign (×) — bottom left, center ~(37,68), thinner -->
+    <path
+        android:fillColor="#1A1A1A"
+        android:pathData="M29,64 L33,60 L37,66 L41,60 L45,64 L39,68 L45,72 L41,76 L37,70 L33,76 L29,72 L35,68 Z" />
+
+    <!-- Orange rounded rectangle — bottom right -->
+    <path
+        android:fillColor="#FF6D00"
+        android:pathData="M57,57 L75,57 Q83,57 83,65 L83,75 Q83,83 75,83 L57,83 Q49,83 49,75 L49,65 Q49,57 57,57 Z" />
+
+    <!-- Equals sign (=) inside orange button — white, stroke 3 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M56,65 L74,65 L74,68 L56,68 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M56,72 L74,72 L74,75 L56,75 Z" />
+
+</vector>

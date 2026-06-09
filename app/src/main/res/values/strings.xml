@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Calculator</string>
+    <string name="calculator">Calculator</string>
+    <string name="converter">Converter</string>
+    <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="history">History</string>
+    <string name="history_empty">No history yet</string>
+    <string name="close">Close</string>
+    <string name="clear">Clear</string>
+    <string name="back">Back</string>
+    <string name="remove">Remove</string>
+    <string name="add_currency">Add Currency</string>
+    <string name="search_currency">Search currency…</string>
+    <string name="offline_rates_notice">Exchange rates are stored offline. Connect to the internet to update.</string>
+    <string name="select_unit">Select Unit</string>
+
+    <!-- Converter types -->
+    <string name="conv_currency">Currency</string>
+    <string name="conv_length">Length</string>
+    <string name="conv_weight">Weight</string>
+    <string name="conv_area">Area</string>
+    <string name="conv_time">Time</string>
+    <string name="conv_temperature">Temperature</string>
+    <string name="conv_speed">Speed</string>
+    <string name="conv_volume">Volume</string>
+    <string name="conv_data">Data</string>
+    <string name="conv_numeral">Numeral</string>
+    <string name="conv_finance">Finance</string>
+    <string name="conv_bmi">BMI</string>
+</resources>

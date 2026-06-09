@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Калькулятор</string>
+    <string name="calculator">Калькулятор</string>
+    <string name="converter">Конвертер</string>
+    <string name="settings">Настройки</string>
+    <string name="language">Язык</string>
+    <string name="history">История</string>
+    <string name="history_empty">История пуста</string>
+    <string name="close">Закрыть</string>
+    <string name="clear">Очистить</string>
+    <string name="back">Назад</string>
+    <string name="remove">Удалить</string>
+    <string name="add_currency">Добавить валюту</string>
+    <string name="search_currency">Поиск валюты…</string>
+    <string name="offline_rates_notice">Курсы валют хранятся офлайн. Подключитесь к интернету для обновления.</string>
+    <string name="select_unit">Выбрать единицу</string>
+    <string name="conv_currency">Валюта</string>
+    <string name="conv_length">Длина</string>
+    <string name="conv_weight">Масса</string>
+    <string name="conv_area">Площадь</string>
+    <string name="conv_time">Время</string>
+    <string name="conv_temperature">Температура</string>
+    <string name="conv_speed">Скорость</string>
+    <string name="conv_volume">Объём</string>
+    <string name="conv_data">Данные</string>
+    <string name="conv_numeral">Система счисления</string>
+    <string name="conv_finance">Финансы</string>
+    <string name="conv_bmi">ИМТ</string>
+</resources>

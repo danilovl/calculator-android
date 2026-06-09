@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">计算器</string>
+    <string name="calculator">计算器</string>
+    <string name="converter">转换器</string>
+    <string name="settings">设置</string>
+    <string name="language">语言</string>
+    <string name="history">历史记录</string>
+    <string name="history_empty">暂无历史记录</string>
+    <string name="close">关闭</string>
+    <string name="clear">清除</string>
+    <string name="back">返回</string>
+    <string name="remove">删除</string>
+    <string name="add_currency">添加货币</string>
+    <string name="search_currency">搜索货币…</string>
+    <string name="offline_rates_notice">汇率已离线存储。连接到互联网以更新。</string>
+    <string name="select_unit">选择单位</string>
+    <string name="conv_currency">货币</string>
+    <string name="conv_length">长度</string>
+    <string name="conv_weight">重量</string>
+    <string name="conv_area">面积</string>
+    <string name="conv_time">时间</string>
+    <string name="conv_temperature">温度</string>
+    <string name="conv_speed">速度</string>
+    <string name="conv_volume">体积</string>
+    <string name="conv_data">数据</string>
+    <string name="conv_numeral">数制</string>
+    <string name="conv_finance">金融</string>
+    <string name="conv_bmi">体重指数</string>
+</resources>
