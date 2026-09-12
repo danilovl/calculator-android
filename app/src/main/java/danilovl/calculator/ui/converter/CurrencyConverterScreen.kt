@@ -28,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import danilovl.calculator.R
 import danilovl.calculator.domain.CurrencySearchService
 import danilovl.calculator.data.model.CurrencyInfo
+import danilovl.calculator.ui.components.AutoSizeText
 import danilovl.calculator.ui.components.BasicKeypad
 import danilovl.calculator.ui.components.SecondaryTopBar
 import danilovl.calculator.ui.theme.*
@@ -279,13 +280,17 @@ fun CurrencyRow(
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Text(
+        AutoSizeText(
             text = value,
             fontSize = 22.sp,
+            minFontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             color = if (isActive) OrangeAccent else TextPrimary,
             textAlign = TextAlign.End,
-            modifier = Modifier.clickable { onTap() }
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .clickable { onTap() },
+            maxLines = 1
         )
 
         if (canRemove) {

@@ -24,15 +24,41 @@ object CalculatorEngine {
         }
     }
 
-    fun formatResult(value: Double): String {
+    fun formatResult(value: Double, maxFractionDigits: Int = 10): String {
         if (value.isNaN() || value.isInfinite()) return "Error"
 
-        val isWholeNumber = value == floor(value) && abs(value) < 1e15
+        val absValue = abs(value)
+        if (absValue != 0.0 && (absValue >= 1e15 || (absValue < 1e-7 && absValue > 0))) {
+            return "%.${maxFractionDigits}e".format(Locale.US, value)
+                .replace(Regex("0+e"), "e")
+                .replace(".e", "e")
+                .replace("e+0", "e")
+                .replace("e+", "e")
+                .replace("e-0", "e-")
+        }
+
+        val isWholeNumber = value == floor(value) && absValue < 1e15
         if (isWholeNumber) {
             return value.toLong().toString()
         }
 
-        return "%.10f".format(Locale.US, value).trimEnd('0').trimEnd('.')
+        val result = "%.${maxFractionDigits}f".format(Locale.US, value).trimEnd('0').trimEnd('.')
+        return if (result == "-0") "0" else result
+    }
+
+    fun formatHistoryResult(value: Double): String {
+        if (value.isNaN() || value.isInfinite()) return "Error"
+        val absValue = abs(value)
+        // For history, we use a lower threshold for scientific notation and less precision to fit in one line
+        if (absValue != 0.0 && (absValue >= 1e10 || (absValue < 1e-7 && absValue > 0))) {
+            return "%.6e".format(Locale.US, value)
+                .replace(Regex("0+e"), "e")
+                .replace(".e", "e")
+                .replace("e+0", "e")
+                .replace("e+", "e")
+                .replace("e-0", "e-")
+        }
+        return formatResult(value, maxFractionDigits = 6)
     }
 
     private fun normalize(expression: String): String {
@@ -218,8 +244,18 @@ object CalculatorEngine {
         private fun parseNumber(): Double {
             skipSpaces()
             val start = pos
-            while (pos < input.length && (input[pos].isDigit() || input[pos] == '.')) {
-                pos++
+            while (pos < input.length) {
+                val c = input[pos]
+                if (c.isDigit() || c == '.') {
+                    pos++
+                } else if (c == 'e' && pos + 1 < input.length && (input[pos + 1].isDigit() || input[pos + 1] == '+' || input[pos + 1] == '-')) {
+                    pos++
+                    if (input[pos] == '+' || input[pos] == '-') {
+                        pos++
+                    }
+                } else {
+                    break
+                }
             }
             if (pos == start) {
                 throw IllegalArgumentException("Expected number at $pos, got '${input.getOrNull(pos)}'")

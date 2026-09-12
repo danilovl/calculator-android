@@ -69,6 +69,7 @@ class UnitConverterViewModel : ViewModel() {
     }
 
     private fun appendDigit(current: String, key: String): String {
+        if (current.length >= 20) return current
         val replacingLeadingZero = current == "0" && key != "."
 
         return if (replacingLeadingZero) key else current + key
@@ -87,7 +88,17 @@ class UnitConverterViewModel : ViewModel() {
     private fun formatValue(value: Double): String {
         if (value.isNaN() || value.isInfinite()) return "Error"
 
-        val isWholeNumber = value == floor(value) && abs(value) < 1e12
+        val absValue = abs(value)
+        if (absValue != 0.0 && (absValue >= 1e15 || (absValue < 1e-7 && absValue > 0))) {
+            return "%.8e".format(Locale.US, value)
+                .replace(Regex("0+e"), "e")
+                .replace(".e", "e")
+                .replace("e+0", "e")
+                .replace("e+", "e")
+                .replace("e-0", "e-")
+        }
+
+        val isWholeNumber = value == floor(value) && absValue < 1e12
         if (isWholeNumber) {
             return value.toLong().toString()
         }

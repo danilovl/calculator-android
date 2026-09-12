@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import danilovl.calculator.R
+import danilovl.calculator.ui.components.AutoSizeText
 import danilovl.calculator.ui.components.BasicKeypad
 import danilovl.calculator.ui.components.SecondaryTopBar
 import danilovl.calculator.ui.theme.*
@@ -134,9 +135,11 @@ fun UnitRow(
             }
         }
         Spacer(modifier = Modifier.weight(1f))
-        Text(
+        AutoSizeText(
             text = value,
+            modifier = Modifier.weight(1f, fill = false),
             fontSize = 28.sp,
+            minFontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             color = TextPrimary,
             textAlign = TextAlign.End,

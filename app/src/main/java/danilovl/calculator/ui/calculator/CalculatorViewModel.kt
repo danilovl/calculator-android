@@ -27,6 +27,7 @@ class CalculatorViewModel : ViewModel() {
 
     private companion object {
         const val MAX_HISTORY = 50
+        const val MAX_NUMBER_LENGTH = 20
         val OPERATORS = setOf("+", "−", "×", "÷")
     }
 
@@ -51,7 +52,8 @@ class CalculatorViewModel : ViewModel() {
                 val expr = s.expression.ifEmpty { return }
                 val value = CalculatorEngine.evaluate(expr, s.isDegreeMode)
                 val resultStr = CalculatorEngine.formatResult(value)
-                val newHistory = (s.history + HistoryEntry(expr, resultStr)).takeLast(MAX_HISTORY)
+                val historyResultStr = CalculatorEngine.formatHistoryResult(value)
+                val newHistory = (s.history + HistoryEntry(expr, historyResultStr)).takeLast(MAX_HISTORY)
                 _state.update { it.copy(
                     expression = resultStr,
                     result = "",
@@ -123,7 +125,7 @@ class CalculatorViewModel : ViewModel() {
                                 }
                                 val segment = if (sepIdx == -1) s.expression
                                               else s.expression.substring(sepIdx + 1)
-                                if (segment.contains(".")) return
+                                if (segment.contains(".") || segment.length >= MAX_NUMBER_LENGTH) return
                                 s.expression + key
                             }
                             key.all { it.isDigit() } && s.expression == "0" -> key
@@ -133,10 +135,26 @@ class CalculatorViewModel : ViewModel() {
                                 if (curLast == "0" && prevLast in operators) {
                                     s.expression.dropLast(1) + key
                                 } else {
+                                    val sepIdx = s.expression.indexOfLast { c ->
+                                        c == '+' || c == '−' || c == '×' || c == '÷' || c == '(' || c == ')'
+                                    }
+                                    val segment = if (sepIdx == -1) s.expression
+                                                  else s.expression.substring(sepIdx + 1)
+                                    if (segment.length >= MAX_NUMBER_LENGTH) return
                                     s.expression + key
                                 }
                             }
-                            else -> s.expression + key
+                            else -> {
+                                if (key.all { it.isDigit() }) {
+                                    val sepIdx = s.expression.indexOfLast { c ->
+                                        c == '+' || c == '−' || c == '×' || c == '÷' || c == '(' || c == ')'
+                                    }
+                                    val segment = if (sepIdx == -1) s.expression
+                                                  else s.expression.substring(sepIdx + 1)
+                                    if (segment.length >= MAX_NUMBER_LENGTH) return
+                                }
+                                s.expression + key
+                            }
                         }
                     }
                 }

@@ -56,9 +56,9 @@ class CurrencyConverterViewModel(application: Application) : AndroidViewModel(ap
             "C" -> "0"
             "⌫" -> if (current.length > 1) current.dropLast(1) else "0"
             "," -> if ("." !in current) "$current." else current
-            "00" -> if (current == "0") "0" else current + "00"
+            "00" -> if (current == "0") "0" else if (current.length >= 19) current else current + "00"
             "=" -> current
-            else -> if (current == "0" && key != ".") key else current + key
+            else -> if (current == "0" && key != ".") key else if (current.length >= 20) current else current + key
         }
         _state.update { it.copy(inputValue = newValue) }
     }
@@ -82,7 +82,21 @@ class CurrencyConverterViewModel(application: Application) : AndroidViewModel(ap
         val result = currencyRepo.convert(amount, fromCode, toCode, s.rates)
         if (result.isNaN() || result.isInfinite()) return "Error"
 
-        return result.toBigDecimal().toPlainString()
+        val absResult = Math.abs(result)
+        if (absResult != 0.0 && (absResult >= 1e15 || (absResult < 1e-4 && absResult > 0))) {
+            return "%.8e".format(java.util.Locale.US, result)
+                .replace(Regex("0+e"), "e")
+                .replace(".e", "e")
+                .replace("e+0", "e")
+                .replace("e+", "e")
+                .replace("e-0", "e-")
+        }
+
+        return if (result == Math.floor(result) && absResult < 1e15) {
+            result.toLong().toString()
+        } else {
+            "%.4f".format(java.util.Locale.US, result).trimEnd('0').trimEnd('.')
+        }
     }
 
     fun addCurrency(currency: CurrencyInfo) {

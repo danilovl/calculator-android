@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import danilovl.calculator.R
+import danilovl.calculator.ui.components.AutoSizeText
 import danilovl.calculator.ui.components.BasicKeypad
 import danilovl.calculator.ui.components.TopBar
 import danilovl.calculator.ui.theme.*
@@ -107,26 +108,56 @@ fun PortraitCalculatorLayout(
                         }
                     ) { _, dragAmount -> totalDrag += dragAmount }
                 }
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            contentAlignment = Alignment.BottomEnd
+                .padding(horizontal = 24.dp, vertical = 8.dp)
         ) {
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
+            Column(
+                modifier = Modifier.align(Alignment.TopEnd),
+                horizontalAlignment = Alignment.End
+            ) {
+                state.history.takeLast(3).forEach { entry ->
+                    val formattedExpr = formatExpression(entry.expression).replace("\n", " ")
+                    val resultPart = " = ${entry.result}"
+                    val maxTotalLength = 35
+                    val displayText = if (formattedExpr.length + resultPart.length > maxTotalLength) {
+                        val allowedExprLength = maxOf(0, maxTotalLength - resultPart.length - 1)
+                        formattedExpr.take(allowedExprLength) + "…" + resultPart
+                    } else {
+                        formattedExpr + resultPart
+                    }
+                    Text(
+                        text = displayText,
+                        fontSize = 16.sp,
+                        color = TextSecondary.copy(alpha = 0.6f),
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                horizontalAlignment = Alignment.End
+            ) {
+                AutoSizeText(
                     text = formatExpression(state.expression),
-                    fontSize = if (state.expression.length > 16) 28.sp else 40.sp,
+                    fontSize = 40.sp,
+                    minFontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary,
                     textAlign = TextAlign.End,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 5
                 )
                 if (state.result.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
+                    AutoSizeText(
                         text = state.result,
                         fontSize = 22.sp,
+                        minFontSize = 14.sp,
                         color = TextSecondary,
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
+                        maxLines = 1
                     )
                 }
             }
@@ -176,26 +207,56 @@ fun LandscapeCalculatorLayout(state: CalculatorState, onKey: (String) -> Unit) {
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            contentAlignment = Alignment.BottomEnd
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
+            Column(
+                modifier = Modifier.align(Alignment.TopEnd),
+                horizontalAlignment = Alignment.End
+            ) {
+                state.history.takeLast(3).forEach { entry ->
+                    val formattedExpr = formatExpression(entry.expression).replace("\n", " ")
+                    val resultPart = " = ${entry.result}"
+                    val maxTotalLength = 30
+                    val displayText = if (formattedExpr.length + resultPart.length > maxTotalLength) {
+                        val allowedExprLength = maxOf(0, maxTotalLength - resultPart.length - 1)
+                        formattedExpr.take(allowedExprLength) + "…" + resultPart
+                    } else {
+                        formattedExpr + resultPart
+                    }
+                    Text(
+                        text = displayText,
+                        fontSize = 14.sp,
+                        color = TextSecondary.copy(alpha = 0.6f),
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                }
+            }
+
+            Column(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                horizontalAlignment = Alignment.End
+            ) {
+                AutoSizeText(
                     text = formatExpression(state.expression),
-                    fontSize = if (state.expression.length > 12) 22.sp else 30.sp,
+                    fontSize = 30.sp,
+                    minFontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = TextPrimary,
                     textAlign = TextAlign.End,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
+                    maxLines = 3
                 )
                 if (state.result.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(
+                    AutoSizeText(
                         text = state.result,
                         fontSize = 18.sp,
+                        minFontSize = 12.sp,
                         color = TextSecondary,
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
+                        maxLines = 1
                     )
                 }
             }

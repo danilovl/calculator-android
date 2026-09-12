@@ -9,6 +9,9 @@ fun formatExpression(expr: String): String {
     if (expr.isEmpty()) return expr
     val sb = StringBuilder()
     var i = 0
+    var currentLineLength = 0
+    val breakLimit = 20
+
     while (i < expr.length) {
         val c = expr[i]
         if (c.isDigit()) {
@@ -19,12 +22,31 @@ fun formatExpression(expr: String): String {
                 val dotStart = i
                 i++
                 while (i < expr.length && expr[i].isDigit()) i++
-                "," + expr.substring(dotStart + 1, i)
+                "." + expr.substring(dotStart + 1, i)
             } else ""
-            sb.append(formatIntegerPart(intPart))
-            sb.append(fracPart)
+
+            val formattedInt = formatIntegerPart(intPart)
+            val formattedNumber = formattedInt + (if (fracPart.isNotEmpty()) "," + fracPart.substring(1) else "")
+            sb.append(formattedNumber)
+            currentLineLength += formattedNumber.length
         } else {
-            sb.append(c)
+            val op = c.toString()
+            val isBinaryOperator = op == "+" || op == "−" || op == "×" || op == "÷" || op == "^"
+            
+            if (isBinaryOperator) {
+                if (currentLineLength > breakLimit) {
+                    sb.append("\n")
+                    currentLineLength = 0
+                } else {
+                    sb.append(" ")
+                    currentLineLength++
+                }
+                sb.append(op).append(" ")
+                currentLineLength += 2
+            } else {
+                sb.append(c)
+                if (c == '\n') currentLineLength = 0 else currentLineLength++
+            }
             i++
         }
     }
@@ -60,6 +82,7 @@ fun formatDisplayNumber(s: String): String {
 
 fun formatConverterResult(s: String): String {
     if (s.isBlank()) return s
+    if (s.contains('e')) return s
     if (s == "-" || s == "." || s == "-.") return s
     val d = s.toDoubleOrNull() ?: return s
 
@@ -75,6 +98,7 @@ fun formatConverterResult(s: String): String {
 
 fun formatCurrencyResult(s: String): String {
     if (s.isBlank()) return s
+    if (s.contains('e')) return s
     if (s == "-" || s == "." || s == "-.") return s
     val d = s.toDoubleOrNull() ?: return s
     val rounded = try {
