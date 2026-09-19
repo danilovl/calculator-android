@@ -288,7 +288,7 @@ fun CurrencyRow(
             color = if (isActive) OrangeAccent else TextPrimary,
             textAlign = TextAlign.End,
             modifier = Modifier
-                .weight(1f, fill = false)
+                .weight(1f)
                 .clickable { onTap() },
             maxLines = 1
         )

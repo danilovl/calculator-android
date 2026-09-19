@@ -134,10 +134,9 @@ fun UnitRow(
                 )
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
         AutoSizeText(
             text = value,
-            modifier = Modifier.weight(1f, fill = false),
+            modifier = Modifier.weight(1f),
             fontSize = 28.sp,
             minFontSize = 14.sp,
             fontWeight = FontWeight.Bold,
