@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import danilovl.calculator.data.CurrencyRepository
 import danilovl.calculator.data.PreferencesRepository
 import danilovl.calculator.data.model.CurrencyInfo
+import danilovl.calculator.domain.CalculatorEngine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,35 +50,75 @@ class CurrencyConverterViewModel(application: Application) : AndroidViewModel(ap
         }
     }
 
-    fun onKey(key: String) {
+    fun onKey(rawKey: String) {
+        val key = if (rawKey == ",") "." else rawKey
         val s = _state.value
         val current = s.inputValue
+        val operators = setOf("+", "−", "×", "÷", "%")
+
         val newValue = when (key) {
             "C" -> "0"
             "⌫" -> if (current.length > 1) current.dropLast(1) else "0"
-            "," -> if ("." !in current) "$current." else current
-            "00" -> if (current == "0") "0" else if (current.length >= 19) current else current + "00"
-            "=" -> current
-            else -> if (current == "0" && key != ".") key else if (current.length >= 20) current else current + key
+            "." -> {
+                val sepIdx = current.indexOfLast { it.toString() in operators }
+                val segment = if (sepIdx == -1) current else current.substring(sepIdx + 1)
+                if ("." in segment) current
+                else if (current.isEmpty() || current.last().toString() in operators) current + "0."
+                else current + "."
+            }
+            "00" -> {
+                if (current == "0") "0"
+                else if (current.last().toString() in operators) current + "0"
+                else if (current.length >= 19) current
+                else current + "00"
+            }
+            "=" -> {
+                val result = CalculatorEngine.evaluate(current)
+                if (result.isNaN() || result.isInfinite()) current
+                else CalculatorEngine.formatResult(result)
+            }
+            else -> {
+                val isOperator = key in operators
+                if (isOperator) {
+                    if (current.isEmpty() || current == "0") current
+                    else if (current.last().toString() in operators) current.dropLast(1) + key
+                    else current + key
+                } else {
+                    if (current == "0") key
+                    else if (current.length >= 20) current
+                    else current + key
+                }
+            }
         }
         _state.update { it.copy(inputValue = newValue) }
     }
 
     fun setActiveInput(index: Int) {
         val converted = getConvertedValue(index)
-        val newValue = converted.toDoubleOrNull()
-            ?.let { java.math.BigDecimal(it).setScale(0, java.math.RoundingMode.HALF_UP).toPlainString() }
-            ?: "0"
+        val newValue = converted.toDoubleOrNull()?.let {
+            if (it == Math.floor(it) && it < 1e15) it.toLong().toString()
+            else "%.4f".format(java.util.Locale.US, it).trimEnd('0').trimEnd('.')
+        } ?: converted
         _state.update { it.copy(inputIndex = index, inputValue = newValue) }
     }
 
     fun getConvertedValue(targetIndex: Int): String {
         val s = _state.value
         if (s.activeCurrencies.isEmpty() || s.rates.isEmpty()) return "0"
-        val amount = s.inputValue.replace(",", ".").toDoubleOrNull() ?: 0.0
+        if (targetIndex == s.inputIndex) return s.inputValue
+
+        val input = s.inputValue
+        val operators = setOf("+", "−", "×", "÷", "%")
+        
+        if (input.isNotEmpty() && input.last().toString() in operators) {
+            return "0"
+        }
+
+        val amount = if (input.isEmpty()) 0.0 else CalculatorEngine.evaluate(input)
+        if (amount.isNaN() || amount.isInfinite()) return "0"
+
         val fromCode = s.activeCurrencies.getOrNull(s.inputIndex)?.code ?: return "0"
         val toCode = s.activeCurrencies.getOrNull(targetIndex)?.code ?: return "0"
-        if (targetIndex == s.inputIndex) return s.inputValue
 
         val result = currencyRepo.convert(amount, fromCode, toCode, s.rates)
         if (result.isNaN() || result.isInfinite()) return "Error"
@@ -125,9 +166,10 @@ class CurrencyConverterViewModel(application: Application) : AndroidViewModel(ap
         list.add(to, item)
         val newFirstOldIndex = s.activeCurrencies.indexOfFirst { it.code == list[0].code }
         val rawConverted = if (newFirstOldIndex == s.inputIndex) s.inputValue else getConvertedValue(newFirstOldIndex)
-        val newInputValue = rawConverted.toDoubleOrNull()
-            ?.let { java.math.BigDecimal(it).setScale(0, java.math.RoundingMode.HALF_UP).toPlainString() }
-            ?: rawConverted
+        val newInputValue = rawConverted.toDoubleOrNull()?.let {
+            if (it == Math.floor(it) && it < 1e15) it.toLong().toString()
+            else "%.4f".format(java.util.Locale.US, it).trimEnd('0').trimEnd('.')
+        } ?: rawConverted
         _state.update { it.copy(activeCurrencies = list, inputIndex = 0, inputValue = newInputValue) }
         viewModelScope.launch { currencyRepo.saveActiveCurrencies(list) }
     }

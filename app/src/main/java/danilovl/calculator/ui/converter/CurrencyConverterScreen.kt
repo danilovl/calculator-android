@@ -34,6 +34,7 @@ import danilovl.calculator.ui.components.SecondaryTopBar
 import danilovl.calculator.ui.theme.*
 import danilovl.calculator.ui.util.formatCurrencyResult
 import danilovl.calculator.ui.util.formatDisplayNumber
+import danilovl.calculator.ui.util.formatExpression
 import kotlin.math.roundToInt
 
 @Composable
@@ -108,7 +109,7 @@ fun CurrencyConverterScreen(
 
         val displayValues = remember(state.inputValue, state.inputIndex, currencies, state.rates) {
             currencies.indices.map { index ->
-                if (index == state.inputIndex) formatDisplayNumber(state.inputValue)
+                if (index == state.inputIndex) formatExpression(state.inputValue).replace("\n", " ")
                 else formatCurrencyResult(viewModel.getConvertedValue(index))
             }
         }
