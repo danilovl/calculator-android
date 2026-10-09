@@ -19,7 +19,8 @@ data class CurrencyConverterState(
     val inputIndex: Int = 0,
     val inputValue: String = "0",
     val isLoading: Boolean = false,
-    val isOffline: Boolean = true
+    val isOffline: Boolean = true,
+    val decimals: Int = 0
 )
 
 class CurrencyConverterViewModel(application: Application) : AndroidViewModel(application) {
@@ -32,6 +33,11 @@ class CurrencyConverterViewModel(application: Application) : AndroidViewModel(ap
 
     init {
         loadData()
+        viewModelScope.launch {
+            prefsRepo.currencyDecimalsFlow.collect { decimals ->
+                _state.update { it.copy(decimals = decimals) }
+            }
+        }
     }
 
     private fun loadData() {
@@ -175,4 +181,9 @@ class CurrencyConverterViewModel(application: Application) : AndroidViewModel(ap
     }
 
     fun getAllAvailable(): List<CurrencyInfo> = currencyRepo.getAllAvailableCurrencies()
+
+    fun setDecimals(decimals: Int) {
+        _state.update { it.copy(decimals = decimals) }
+        viewModelScope.launch { prefsRepo.saveCurrencyDecimals(decimals) }
+    }
 }

@@ -98,6 +98,26 @@ fun CurrencyConverterScreen(
             onBack = onBack,
             centerTitle = true
         ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { viewModel.setDecimals(if (state.decimals == 0) 2 else 0) }
+                    .padding(start = 8.dp)
+            ) {
+                Checkbox(
+                    checked = state.decimals == 0,
+                    onCheckedChange = { viewModel.setDecimals(if (it) 0 else 2) },
+                    colors = CheckboxDefaults.colors(checkedColor = OrangeAccent),
+                    modifier = Modifier.size(32.dp)
+                )
+                Text(
+                    text = stringResource(R.string.round_to_integer),
+                    fontSize = 12.sp,
+                    color = TextPrimary,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            }
             IconButton(onClick = { showAddDialog = true }) {
                 Icon(
                     Icons.Default.Add,
@@ -107,10 +127,10 @@ fun CurrencyConverterScreen(
             }
         }
 
-        val displayValues = remember(state.inputValue, state.inputIndex, currencies, state.rates) {
+        val displayValues = remember(state.inputValue, state.inputIndex, currencies, state.rates, state.decimals) {
             currencies.indices.map { index ->
                 if (index == state.inputIndex) formatExpression(state.inputValue).replace("\n", " ")
-                else formatCurrencyResult(viewModel.getConvertedValue(index))
+                else formatCurrencyResult(viewModel.getConvertedValue(index), state.decimals)
             }
         }
 

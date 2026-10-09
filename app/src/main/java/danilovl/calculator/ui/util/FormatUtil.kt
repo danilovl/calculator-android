@@ -96,13 +96,13 @@ fun formatConverterResult(s: String): String {
     return formatDisplayNumber(rounded)
 }
 
-fun formatCurrencyResult(s: String): String {
+fun formatCurrencyResult(s: String, decimals: Int = 0): String {
     if (s.isBlank()) return s
     if (s.contains('e')) return s
     if (s == "-" || s == "." || s == "-.") return s
     val d = s.toDoubleOrNull() ?: return s
     val rounded = try {
-        BigDecimal(d).setScale(0, RoundingMode.HALF_UP).toPlainString()
+        BigDecimal(d).setScale(decimals, RoundingMode.HALF_UP).toPlainString()
     } catch (e: Exception) {
         s
     }

@@ -14,6 +14,7 @@
     <string name="search_currency">Поиск валюты…</string>
     <string name="offline_rates_notice">Курсы валют хранятся офлайн. Подключитесь к интернету для обновления.</string>
     <string name="select_unit">Выбрать единицу</string>
+    <string name="round_to_integer">Целые</string>
     <string name="conv_currency">Валюта</string>
     <string name="conv_length">Длина</string>
     <string name="conv_weight">Масса</string>

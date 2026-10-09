@@ -18,6 +18,7 @@ class PreferencesRepository(private val context: Context) {
         val KEY_CURRENCY_RATES = stringPreferencesKey("currency_rates")
         val KEY_ACTIVE_CURRENCIES = stringPreferencesKey("active_currencies")
         val KEY_RATES_TIMESTAMP = longPreferencesKey("rates_timestamp")
+        val KEY_CURRENCY_DECIMALS = intPreferencesKey("currency_decimals")
         const val DEFAULT_LANGUAGE = "en"
     }
 
@@ -37,6 +38,10 @@ class PreferencesRepository(private val context: Context) {
         .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
         .map { prefs -> prefs[KEY_RATES_TIMESTAMP] ?: 0L }
 
+    val currencyDecimalsFlow: Flow<Int> = context.dataStore.data
+        .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
+        .map { prefs -> prefs[KEY_CURRENCY_DECIMALS] ?: 0 }
+
     suspend fun saveLanguage(language: String) {
         context.dataStore.edit { prefs -> prefs[KEY_LANGUAGE] = language }
     }
@@ -50,5 +55,9 @@ class PreferencesRepository(private val context: Context) {
 
     suspend fun saveActiveCurrencies(currenciesJson: String) {
         context.dataStore.edit { prefs -> prefs[KEY_ACTIVE_CURRENCIES] = currenciesJson }
+    }
+
+    suspend fun saveCurrencyDecimals(decimals: Int) {
+        context.dataStore.edit { prefs -> prefs[KEY_CURRENCY_DECIMALS] = decimals }
     }
 }
