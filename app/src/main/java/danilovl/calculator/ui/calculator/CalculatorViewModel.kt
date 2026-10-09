@@ -38,7 +38,13 @@ class CalculatorViewModel : ViewModel() {
         val key = if (rawKey == ",") "." else rawKey
         val s = _state.value
         when (key) {
-            "C" -> _state.update { it.copy(expression = "", result = "", justEvaluated = false) }
+            "C" -> {
+                if (s.expression.isEmpty()) {
+                    clearHistory()
+                } else {
+                    _state.update { it.copy(expression = "", result = "", justEvaluated = false) }
+                }
+            }
             "⌫" -> {
                 if (s.justEvaluated) {
                     _state.update { it.copy(expression = "", result = "", justEvaluated = false) }
@@ -195,6 +201,14 @@ class CalculatorViewModel : ViewModel() {
         if (value.isNaN() || value.isInfinite()) return ""
 
         return "= ${formatDisplayNumber(CalculatorEngine.formatResult(value))}"
+    }
+
+    fun selectHistoryEntry(expression: String) {
+        _state.update { it.copy(
+            expression = expression,
+            result = computePreview(expression),
+            justEvaluated = false
+        ) }
     }
 
     fun toggleScientific() {

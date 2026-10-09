@@ -3,6 +3,7 @@ package danilovl.calculator.ui.calculator
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -48,8 +49,7 @@ fun CalculatorScreen(
             onDismiss = { showHistory = false },
             onClear = { viewModel.clearHistory(); showHistory = false },
             onSelect = { expr ->
-                viewModel.onKey("C")
-                expr.forEach { viewModel.onKey(it.toString()) }
+                viewModel.selectHistoryEntry(expr)
                 showHistory = false
             }
         )
@@ -77,11 +77,16 @@ fun CalculatorScreen(
         )
 
         if (isLandscape) {
-            LandscapeCalculatorLayout(state = state, onKey = viewModel::onKey)
+            LandscapeCalculatorLayout(
+                state = state,
+                onKey = viewModel::onKey,
+                onSelectHistory = viewModel::selectHistoryEntry
+            )
         } else {
             PortraitCalculatorLayout(
                 state = state,
                 onKey = viewModel::onKey,
+                onSelectHistory = viewModel::selectHistoryEntry,
                 onToggleScientific = viewModel::toggleScientific
             )
         }
@@ -92,6 +97,7 @@ fun CalculatorScreen(
 fun PortraitCalculatorLayout(
     state: CalculatorState,
     onKey: (String) -> Unit,
+    onSelectHistory: (String) -> Unit,
     onToggleScientific: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -131,7 +137,9 @@ fun PortraitCalculatorLayout(
                         textAlign = TextAlign.End,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier
+                            .padding(bottom = 4.dp)
+                            .clickable { onSelectHistory(entry.expression) }
                     )
                 }
             }
@@ -201,7 +209,11 @@ fun PortraitCalculatorLayout(
 }
 
 @Composable
-fun LandscapeCalculatorLayout(state: CalculatorState, onKey: (String) -> Unit) {
+fun LandscapeCalculatorLayout(
+    state: CalculatorState,
+    onKey: (String) -> Unit,
+    onSelectHistory: (String) -> Unit
+) {
     Row(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
@@ -230,7 +242,9 @@ fun LandscapeCalculatorLayout(state: CalculatorState, onKey: (String) -> Unit) {
                         textAlign = TextAlign.End,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.padding(bottom = 2.dp)
+                        modifier = Modifier
+                            .padding(bottom = 2.dp)
+                            .clickable { onSelectHistory(entry.expression) }
                     )
                 }
             }
